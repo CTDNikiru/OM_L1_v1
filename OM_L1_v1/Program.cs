@@ -11,7 +11,7 @@ namespace OM_L1_v1
             int pointer = 0;
             string input = "";
 
-            Console.WriteLine("Enter command: 1 - Dichotomy, 2 - Gold section, q - quit");
+            Console.WriteLine("Enter command: 1 - Dichotomy, 2 - Gold section, 3 - Minimum find, q - quit");
             input = Console.ReadLine();
             while (input != "q")
             {
@@ -19,7 +19,7 @@ namespace OM_L1_v1
 
 
                 Solver(pointer, start, end);
-                Console.WriteLine("Enter command: 1 - Dichotomy, 2 - Gold section, q - quit");
+                Console.WriteLine("Enter command: 1 - Dichotomy, 2 - Gold section, 3 - Minimum find, q - quit");
                 input = Console.ReadLine();
             }
         }
@@ -29,10 +29,43 @@ namespace OM_L1_v1
             return Math.Pow((arg - 6), 2);
         }
 
+        static void IntervalSearch(double x0)
+        {
+            const double DELTA = 1;
+            double h = 0;
+            double xk = 0;
+
+            if (func(x0) > func(x0 + DELTA))
+            {
+                xk = x0 + DELTA;
+                h = DELTA;
+            }
+            else if(func(x0) > func(x0 - DELTA))
+            {
+                xk = x0 - DELTA;
+                h = -DELTA;
+            }
+
+            double xk1 = xk;
+            double xmk = x0;
+            int k = 1;
+
+            do
+            {
+                xk = xk1;
+                h = h * 2;
+                xk1 = xk + h;
+                Console.WriteLine("x" + k + "\t" + xmk + "\t" + xk1);
+                k++;
+                xmk = xk;
+            } while (func(xk) > func(xk1));
+
+        }
+
         static void Solver(int pointer, double start,double end)
         {
-            const double EPS = 0.001;
-            const double DELTA = 0.01;
+            const double EPS = 0.1;
+            const double DELTA = 1;
             double x1 = 0, x2 = 0;
             int n = 0;
 
@@ -48,7 +81,8 @@ namespace OM_L1_v1
                                                     Math.Log((Math.Sqrt(5) + 1) / 2)));
                     break;
                 case 3:
-                    //1, b-a/EPS find min Fibon 
+                    n = 0;
+                    IntervalSearch(start);
                     break;
             }
             #endregion
@@ -69,7 +103,6 @@ namespace OM_L1_v1
                         x1 = start + ((3 - Math.Sqrt(5)) / 2) * (end - start);
                         x2 = start + ((Math.Sqrt(5) - 1) / 2) * (end - start);
                         break;
-
                 }
 
                 Console.WriteLine("Iter = " + (i + 1) + " [" + start + "\t" + end + "]");
